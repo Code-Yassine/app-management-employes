@@ -3,7 +3,6 @@ package Controller;
 import Model.*;
 import View.*;
 import java.util.List;
-
 import javax.swing.table.DefaultTableModel;
 
 
@@ -12,6 +11,16 @@ public class EmployeController {
     private final EmployeView View;
     public EmployeModel model;
     public static int id = 0;
+    public static int oldselectedrow = -1;
+    public static boolean test = false;
+    String nom = "";
+    String prenom = "";
+    String email = "";
+    String telephone = "";
+    double salaire = 0;
+    Role role = null;
+    Post poste = null;
+    boolean updatereussi = false;
 
     public EmployeController(EmployeView view, EmployeModel model) {
         this.View = view;
@@ -21,6 +30,7 @@ public class EmployeController {
         View.getdeleteButton().addActionListener(e -> deleteEmploye());
         View.getupdateButton().addActionListener(e -> updateEmploye());
         View.getdisplayButton().addActionListener(e -> displayEmploye());
+        EmployeView.Tableau.getSelectionModel().addListSelectionListener(e -> updateEmployebyselect());
     }
 
 
@@ -64,7 +74,6 @@ public class EmployeController {
 
     private void deleteEmploye(){
         int selectedrow = EmployeView.Tableau.getSelectedRow();
-
         if(selectedrow == -1){
             View.afficherMessageErreur("Veuillez selectionner une ligne.");
         }else{
@@ -80,20 +89,17 @@ public class EmployeController {
 
     // function of Update :
 
-    private void updateEmploye(){
+    private void updateEmployebyselect(){
         int selectedrow = EmployeView.Tableau.getSelectedRow();
-        String nom = "";
-        String prenom = "";
-        String email = "";
-        String telephone = "";
-        double salaire = 0;
-        Role role = null;
-        Post poste = null;
-        boolean updatereussi = false;
 
-        if(selectedrow == -1 && View.testChampsVide()){
-            View.afficherMessageErreur("Veuillez selectionner une ligne.");
-        }else if(View.testChampsVide()){
+        if (selectedrow == -1) {
+            return;
+        }
+        if (!test) {
+            View.afficherMessageErreur("Veuillez d'abord sélectionner une ligne à modifier.");
+            return;
+        }
+        try{
             id = (int) EmployeView.Tableau.getValueAt(selectedrow, 0);
             nom = (String) EmployeView.Tableau.getValueAt(selectedrow, 1);
             prenom = (String) EmployeView.Tableau.getValueAt(selectedrow, 2);
@@ -102,8 +108,19 @@ public class EmployeController {
             salaire = (double) EmployeView.Tableau.getValueAt(selectedrow, 5);
             role = (Role) EmployeView.Tableau.getValueAt(selectedrow, 6);
             poste = (Post) EmployeView.Tableau.getValueAt(selectedrow, 7);
+            View.remplaireChamps(id, nom, prenom, email, telephone, salaire, role, poste);
+            test = true;
+        }catch(Exception e){
+             View.afficherMessageErreur("Erreur lors de la récupération des données");
         }
-        if(!View.testChampsVide()){
+    }
+
+    private void updateEmploye(){
+        if (!test) {
+            View.afficherMessageErreur("Veuillez d'abord sélectionner une ligne à modifier.");
+            return;
+        }
+        try {
             nom = View.getNom();
             prenom = View.getPrenom();
             email = View.getEmail();
@@ -111,18 +128,20 @@ public class EmployeController {
             salaire = View.getSalaire();
             role = View.getRole();
             poste = View.getPoste();
-            updatereussi = model.updateEmploye(id, nom, prenom, email, telephone, salaire, role, poste);
-
-            if(updatereussi){
-                View.afficherMessageSucces("L'employe a bien ete modifier");
+    
+            boolean updateSuccessful = model.updateEmploye(id, nom, prenom, email, telephone, salaire, role, poste);
+    
+            if (updateSuccessful) {
+                test = false; 
+                View.afficherMessageSucces("L'employé a été modifié avec succès.");
                 displayEmploye();
                 View.viderChamps();
-            }else{
-                View.afficherMessageErreur("L'employe n'a pas ete modifier");
+            } else {
+                View.afficherMessageErreur("Erreur lors de la mise à jour de l'employé.");
             }
+        } catch (Exception e) {
+            
+            View.afficherMessageErreur("Erreur lors de la mise à jour");
         }
-
-        View.remplaireChamps(id, nom, prenom, email, telephone, salaire, role, poste);
     }
-
-}
+    }
