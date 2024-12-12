@@ -95,10 +95,6 @@ public class EmployeController {
         if (selectedrow == -1) {
             return;
         }
-        if (!test) {
-            View.afficherMessageErreur("Veuillez d'abord sélectionner une ligne à modifier.");
-            return;
-        }
         try{
             id = (int) EmployeView.Tableau.getValueAt(selectedrow, 0);
             nom = (String) EmployeView.Tableau.getValueAt(selectedrow, 1);
