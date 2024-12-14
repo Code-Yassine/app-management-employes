@@ -2,14 +2,18 @@ package Controller;
 
 import Model.*;
 import View.*;
+
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 
+
 public class EmployeController {
 
-    private final EmployeView View;
-    public EmployeModel model;
+    private final Employe_HolidayView View;
+    public static EmployeModel model_employe ;
     public static int id = 0;
     public static int oldselectedrow = -1;
     public static boolean test = false;
@@ -20,29 +24,33 @@ public class EmployeController {
     double salaire = 0;
     Role role = null;
     Post poste = null;
+    int solde = 0;
     boolean updatereussi = false;
 
-    public EmployeController(EmployeView view, EmployeModel model) {
+    public EmployeController(Employe_HolidayView view, EmployeModel model) {
         this.View = view;
-        this.model = model;
+        this.model_employe = model;
 
-        View.getaddButton().addActionListener(e -> addEmploye());
-        View.getdeleteButton().addActionListener(e -> deleteEmploye());
-        View.getupdateButton().addActionListener(e -> updateEmploye());
-        View.getdisplayButton().addActionListener(e -> displayEmploye());
-        EmployeView.Tableau.getSelectionModel().addListSelectionListener(e -> updateEmployebyselect());
+        View.getaddButton_employe().addActionListener(e -> addEmploye());
+        View.getdeleteButton_employe().addActionListener(e -> deleteEmploye());
+        View.getupdateButton_employe().addActionListener(e -> updateEmploye());
+        View.getdisplayButton_employe().addActionListener(e -> displayEmploye());
+        Employe_HolidayView.Tableau.getSelectionModel().addListSelectionListener(e -> updateEmployebyselect());
     }
 
 
 
-    private void displayEmploye() {
-        List<Employe> Employes = model.displayEmploye();
-
-        DefaultTableModel tableModel = (DefaultTableModel) EmployeView.Tableau.getModel();
+    public void displayEmploye() {
+        List<Employe> Employes = model_employe.displayEmploye();
+        if(Employes.isEmpty()){
+            View.afficherMessageErreur("Aucun employe.");
+        }
+        DefaultTableModel tableModel = (DefaultTableModel) Employe_HolidayView.Tableau.getModel();
         tableModel.setRowCount(0);
         for(Employe e : Employes){
-            tableModel.addRow(new Object[]{e.getId(), e.getNom(), e.getPrenom(), e.getEmail(), e.getTelephone(), e.getSalaire(), e.getRole(), e.getPost()});
+            tableModel.addRow(new Object[]{e.getId(), e.getNom(), e.getPrenom(), e.getEmail(), e.getTelephone(), e.getSalaire(), e.getRole(), e.getPost(),e.getSolde()});
         }
+        View.remplaire_les_employes();
     }
 
     
@@ -57,8 +65,8 @@ public class EmployeController {
         Role role = View.getRole();
         Post poste = View.getPoste();
 
-        View.viderChamps();
-        boolean addreussi = model.addEmploye(0,nom, prenom, email, telephone, salaire, role, poste);
+        View.viderChamps_em();
+        boolean addreussi = model_employe.addEmploye(0,nom, prenom, email, telephone, salaire, role, poste ,25);
 
         if(addreussi == true){
             View.afficherMessageSucces("L'employe a bien ete ajoutee.");
@@ -73,12 +81,12 @@ public class EmployeController {
     // function of delete Employe : 
 
     private void deleteEmploye(){
-        int selectedrow = EmployeView.Tableau.getSelectedRow();
+        int selectedrow = Employe_HolidayView.Tableau.getSelectedRow();
         if(selectedrow == -1){
             View.afficherMessageErreur("Veuillez selectionner une ligne.");
         }else{
-            int id = (int) EmployeView.Tableau.getValueAt(selectedrow, 0);
-            if(model.deleteEmploye(id)){
+            int id = (int) Employe_HolidayView.Tableau.getValueAt(selectedrow, 0);
+            if(model_employe.deleteEmploye(id)){
                 View.afficherMessageSucces("L'employe a bien ete supprimer.");
                 displayEmploye();
             }else{
@@ -90,21 +98,22 @@ public class EmployeController {
     // function of Update :
 
     private void updateEmployebyselect(){
-        int selectedrow = EmployeView.Tableau.getSelectedRow();
+        int selectedrow = Employe_HolidayView.Tableau.getSelectedRow();
 
         if (selectedrow == -1) {
             return;
         }
         try{
-            id = (int) EmployeView.Tableau.getValueAt(selectedrow, 0);
-            nom = (String) EmployeView.Tableau.getValueAt(selectedrow, 1);
-            prenom = (String) EmployeView.Tableau.getValueAt(selectedrow, 2);
-            email = (String) EmployeView.Tableau.getValueAt(selectedrow, 3);
-            telephone = (String) EmployeView.Tableau.getValueAt(selectedrow, 4);
-            salaire = (double) EmployeView.Tableau.getValueAt(selectedrow, 5);
-            role = (Role) EmployeView.Tableau.getValueAt(selectedrow, 6);
-            poste = (Post) EmployeView.Tableau.getValueAt(selectedrow, 7);
-            View.remplaireChamps(id, nom, prenom, email, telephone, salaire, role, poste);
+            id = (int) Employe_HolidayView.Tableau.getValueAt(selectedrow, 0);
+            nom = (String) Employe_HolidayView.Tableau.getValueAt(selectedrow, 1);
+            prenom = (String) Employe_HolidayView.Tableau.getValueAt(selectedrow, 2);
+            email = (String) Employe_HolidayView.Tableau.getValueAt(selectedrow, 3);
+            telephone = (String) Employe_HolidayView.Tableau.getValueAt(selectedrow, 4);
+            salaire = (double) Employe_HolidayView.Tableau.getValueAt(selectedrow, 5);
+            role = (Role) Employe_HolidayView.Tableau.getValueAt(selectedrow, 6);
+            poste = (Post) Employe_HolidayView.Tableau.getValueAt(selectedrow, 7);
+            solde = (int) Employe_HolidayView.Tableau.getValueAt(selectedrow, 8);
+            View.remplaireChamps_em(id, nom, prenom, email, telephone, salaire, role, poste);
             test = true;
         }catch(Exception e){
              View.afficherMessageErreur("Erreur lors de la récupération des données");
@@ -125,13 +134,13 @@ public class EmployeController {
             role = View.getRole();
             poste = View.getPoste();
     
-            boolean updateSuccessful = model.updateEmploye(id, nom, prenom, email, telephone, salaire, role, poste);
+            boolean updateSuccessful = model_employe.updateEmploye(id, nom, prenom, email, telephone, salaire, role, poste , solde);
     
             if (updateSuccessful) {
                 test = false; 
                 View.afficherMessageSucces("L'employé a été modifié avec succès.");
                 displayEmploye();
-                View.viderChamps();
+                View.viderChamps_em();
             } else {
                 View.afficherMessageErreur("Erreur lors de la mise à jour de l'employé.");
             }
@@ -140,4 +149,18 @@ public class EmployeController {
             View.afficherMessageErreur("Erreur lors de la mise à jour");
         }
     }
+
+    public void resetSolde(){
+        Calendar now = Calendar.getInstance();
+        if(now.get(Calendar.DAY_OF_YEAR) == 1){
+            for (Employe employe : model_employe.displayEmploye()) {
+                updateSolde(employe.getId(), 25);
+            }
+        }
     }
+
+    public static void updateSolde(int  id , int solde){
+        boolean updateSuccessful = model_employe.updateSolde(id, solde);
+    }
+
+}

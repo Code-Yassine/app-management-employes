@@ -10,7 +10,7 @@ public class EmployeModel {
 
     // funtion of add Employe :
 
-    public boolean addEmploye(int id ,String nom, String prenom, String email, String telephone, double salaire, Role role, Post post) {
+    public boolean addEmploye(int id ,String nom, String prenom, String email, String telephone, double salaire, Role role, Post post, int solde) {
         if(salaire < 0 ){
             System.out.println("Erreur : le salaire doit etre positif.");
             return false;
@@ -28,31 +28,40 @@ public class EmployeModel {
             return false;
         }
 
-        Employe e = new Employe(id,nom, prenom, email, telephone, salaire, role, post);
+        Employe e = new Employe(id,nom, prenom, email, telephone, salaire, role, post ,solde);
         
-        return dao.addEmploye(e);
+        dao.add(e);
+
+        return true;
     }
 
     // function of delete Employe :
 
     public  boolean deleteEmploye(int id){
-        dao.deleteEmploye(id);
+        dao.delete(id);
         return true;
     }
 
     // function of update Employe :
 
-    public boolean updateEmploye(int id, String nom, String prenom, String email, String telephone, double salaire, Role role, Post post) {
+    public boolean updateEmploye(int id, String nom, String prenom, String email, String telephone, double salaire, Role role, Post post , int solde) {
 
-        Employe e = new Employe(id,nom, prenom, email, telephone, salaire, role, post);
-        dao.updateEmploye(e);
+        Employe e = new Employe(id,nom, prenom, email, telephone, salaire, role, post,solde);
+        dao.update(e);
+        return true;
+    }
+
+    //function of update solde Employe :
+
+    public boolean updateSolde(int id, int solde) {
+        dao.updateSolde(id, solde);
         return true;
     }
 
     //function of display Employe :
 
     public List<Employe> displayEmploye() {
-        List<Employe> Employes = dao.displayEmploye();
+        List<Employe> Employes = dao.display();
         return Employes;
     }
 }

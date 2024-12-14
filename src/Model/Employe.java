@@ -9,8 +9,9 @@ public class Employe{
     private double salaire;
     private Role role;
     private Post poste ;
+    private int solde ;
 
-    public Employe(int id ,String nom, String prenom, String email, String telephone, double salaire, Role role, Post post) {
+    public Employe(int id ,String nom, String prenom, String email, String telephone, double salaire, Role role, Post post ,int solde){
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
@@ -19,7 +20,9 @@ public class Employe{
         this.salaire = salaire;
         this.role = role;
         this.poste = post;
+        this.solde = solde;
     }
+
 
     public int getId(){
         return id;
@@ -82,5 +85,13 @@ public class Employe{
 
     public void setPost(Post post) {  
         this.poste = post;    
+    }
+
+    public void setSolde (int conge){
+        this.solde = conge;
+    }
+
+    public int getSolde(){
+        return solde;
     }
 }
