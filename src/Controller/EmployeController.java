@@ -1,14 +1,14 @@
 package Controller;
 
+// Importation des classes nécessaires
 import Model.*;
 import View.*;
 
 import java.sql.Date;
-import java.util.Calendar;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
-
+import DAO.EmployeDAOimpl;
 
 public class EmployeController {
 
@@ -31,15 +31,20 @@ public class EmployeController {
         this.View = view;
         this.model_employe = model;
 
+        displayEmploye();
+        // Action Listener :
         View.getaddButton_employe().addActionListener(e -> addEmploye());
         View.getdeleteButton_employe().addActionListener(e -> deleteEmploye());
         View.getupdateButton_employe().addActionListener(e -> updateEmploye());
         View.getdisplayButton_employe().addActionListener(e -> displayEmploye());
+        View.getCreateAcconte().addActionListener(e -> createAcconte());
+
+        // Selection Listener :
         Employe_HolidayView.Tableau.getSelectionModel().addListSelectionListener(e -> updateEmployebyselect());
     }
 
 
-
+    //function of display Employe :
     public void displayEmploye() {
         List<Employe> Employes = model_employe.displayEmploye();
         if(Employes.isEmpty()){
@@ -50,12 +55,12 @@ public class EmployeController {
         for(Employe e : Employes){
             tableModel.addRow(new Object[]{e.getId(), e.getNom(), e.getPrenom(), e.getEmail(), e.getTelephone(), e.getSalaire(), e.getRole(), e.getPost(),e.getSolde()});
         }
+        // remplir la liste des employes dans le holiday automatique :
         View.remplaire_les_employes();
     }
 
     
     // function of add Employe :
-
     private void addEmploye() {
         String nom = View.getNom();
         String prenom = View.getPrenom();
@@ -79,7 +84,6 @@ public class EmployeController {
 
 
     // function of delete Employe : 
-
     private void deleteEmploye(){
         int selectedrow = Employe_HolidayView.Tableau.getSelectedRow();
         if(selectedrow == -1){
@@ -96,7 +100,7 @@ public class EmployeController {
     }
 
     // function of Update :
-
+        // function one of fetch data employe by select and display it in the forme:
     private void updateEmployebyselect(){
         int selectedrow = Employe_HolidayView.Tableau.getSelectedRow();
 
@@ -120,6 +124,7 @@ public class EmployeController {
         }
     }
 
+        // function two of update Employe by click update button :
     private void updateEmploye(){
         if (!test) {
             View.afficherMessageErreur("Veuillez d'abord sélectionner une ligne à modifier.");
@@ -150,17 +155,19 @@ public class EmployeController {
         }
     }
 
-    public void resetSolde(){
-        Calendar now = Calendar.getInstance();
-        if(now.get(Calendar.DAY_OF_YEAR) == 1){
-            for (Employe employe : model_employe.displayEmploye()) {
-                updateSolde(employe.getId(), 25);
-            }
-        }
+    // function of update solde :
+    public static void updateSolde(int  id , int solde){
+       model_employe.updateSolde(id, solde);
     }
 
-    public static void updateSolde(int  id , int solde){
-        boolean updateSuccessful = model_employe.updateSolde(id, solde);
+    public void createAcconte(){
+        int selectedrow = Employe_HolidayView.Tableau.getSelectedRow();
+        if(selectedrow == -1){
+            View.afficherMessageErreur("Veuillez selectionner une ligne.");
+        }else{
+            View.CreateConteView createConteView = new CreateConteView();
+            int id = (int) Employe_HolidayView.Tableau.getValueAt(selectedrow, 0);
+        }
     }
 
 }

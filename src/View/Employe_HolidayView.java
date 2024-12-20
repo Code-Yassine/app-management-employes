@@ -1,5 +1,6 @@
 package View;
 
+// Importation des classes nécessaires
 import DAO.EmployeDAOimpl;
 import Model.Employe;
 import Model.EmployeModel;
@@ -7,20 +8,20 @@ import Model.Post;
 import Model.Role;
 import Model.Type_holiday;
 import java.awt.*;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.util.List;
 
 public class Employe_HolidayView extends JFrame {
 
-    // le tableau de employe et congé
+    // Déclaration d'un onglet principal (TabbedPane) pour séparer les sections Employé et Congé
     private JTabbedPane tabbedPane = new JTabbedPane();
 
-    // les tabs
+    // Déclaration des panneaux pour les onglets
     private JPanel employeTab = new JPanel();
     private JPanel holidayTab = new JPanel();
 
-    // les panels
+    // Panneaux supplémentaires pour l'organisation des composants
     private JPanel Employepan = new JPanel();
     private JPanel Holidaypan = new JPanel();
     private JPanel Display_Table_employe = new JPanel();
@@ -30,7 +31,7 @@ public class Employe_HolidayView extends JFrame {
     private JPanel panButton_employe = new JPanel();
     private JPanel panButton_holiday = new JPanel();
 
-    // les labels du l'employe
+    // Labels pour la section "Employé"
     private JLabel label_nom = new JLabel("Nom");
     private JLabel label_prenom = new JLabel("Prenom");
     private JLabel label_email = new JLabel("Email");
@@ -39,62 +40,68 @@ public class Employe_HolidayView extends JFrame {
     private JLabel label_role = new JLabel("Role");
     private JLabel label_poste = new JLabel("Poste");
 
-    // les labels du congé
+    // Labels pour la section "Congé"
     private JLabel label_employe = new JLabel("Nom de l'employé");
     private JLabel label_startDate = new JLabel("Date de debut");
     private JLabel label_endDate = new JLabel("Date de fin");
     private JLabel label_type = new JLabel("Type");
     private JComboBox<Type_holiday> TypeComboBox = new JComboBox<>(Type_holiday.values());
 
-    // les textfield du l'employe
+    // Champs de texte pour la section "Employé"
     private JTextField text_nom = new JTextField();
+    
     private JTextField text_prenom = new JTextField();
     private JTextField text_email = new JTextField();
     private JTextField text_tele = new JTextField();
     private JTextField text_salaire = new JTextField();
 
+    // Combobox pour les rôles et postes des employés
     private JComboBox<Role> roleComboBox = new JComboBox<>(Role.values());
     private JComboBox<Post> posteComboBox = new JComboBox<>(Post.values());
 
-    // les textfield du congé
+    // Champs de texte et combobox pour la section "Congé"
     private JComboBox<String> text_employe = new JComboBox<>();
-    private JTextField text_startDate = new JTextField("year-month-day");
-    private JTextField text_endDate = new JTextField("year-month-day");
+    private JTextField text_startDate = new JTextField("YYYY-MM-DD");
+    private JTextField text_endDate = new JTextField("YYYY-MM-DD");
 
-    // les boutons du l'employe
+    // Boutons pour les actions sur les employés
     private JButton addButton_employe = new JButton("Ajouter");
     private JButton updateButton_employe = new JButton("Modifier");
     private JButton deleteButton_employe = new JButton("Supprimer");
     private JButton displayButton_employe = new JButton("Afficher");
+    private JButton create_Acconte_Button = new JButton("Create Acconte");
 
-    // les boutons du congé
+    // Boutons pour les actions sur les congés
     private JButton addButton_holiday = new JButton("Ajouter");
     private JButton updateButton_holiday = new JButton("Modifier");
     private JButton deleteButton_holiday = new JButton("Supprimer");
     private JButton displayButton_holiday = new JButton("Afficher");
 
-    // le tableau de l'employe
+    // Tableaux pour afficher les données des employés et des congés
     JPanel pan0 = new JPanel(new BorderLayout());
     public static String[] columnNames_employe = {"ID", "Nom", "Prenom", "Email", "Téléphone", "Salaire", "Role", "Poste","solde"};
     public static DefaultTableModel tableModel = new DefaultTableModel(columnNames_employe, 0);
     public static JTable Tableau = new JTable(tableModel);
 
-    // le tableau du congé
+
     JPanel pan1 = new JPanel(new BorderLayout());
     public static String[] columnNames_holiday = {"ID", "nom_employe","date_debut","date_fin","type"};
     public static DefaultTableModel tableModel1 = new DefaultTableModel(columnNames_holiday, 0);
     public static JTable Tableau1 = new JTable(tableModel1);
 
+    // Constructeur de la vue
     public Employe_HolidayView() {
 
+        // Configuration de la fenêtre principale
         setTitle("Gestion des employes et des congés");
-        setSize(1000, 600);
+        setSize(990, 600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        // Ajout de l'onglet principal
         add(tabbedPane);
 
-    // Employe Tab
+    // Configuration de l'onglet "Employé"
         employeTab.setLayout(new BorderLayout());
         employeTab.add(Employepan, BorderLayout.CENTER);
         
@@ -106,11 +113,13 @@ public class Employe_HolidayView extends JFrame {
         pan0.add(new JScrollPane(Tableau), BorderLayout.CENTER);
         Display_Table_employe.add(pan0);
 
+        // Ajout des boutons et champs de saisie pour la section "Employé"
         Employepan.add(panButton_employe, BorderLayout.SOUTH);
         panButton_employe.add(addButton_employe);
         panButton_employe.add(updateButton_employe);
         panButton_employe.add(deleteButton_employe);
         panButton_employe.add(displayButton_employe);
+        panButton_employe.add(create_Acconte_Button);
 
         Employepan.add(Forme_employe, BorderLayout.NORTH);
         Forme_employe.setLayout(new GridLayout(7, 2, 10, 10));
@@ -129,7 +138,7 @@ public class Employe_HolidayView extends JFrame {
         Forme_employe.add(label_poste);
         Forme_employe.add(posteComboBox);
 
-    // Holiday Tab 
+    // Configuration de l'onglet "Congé"
         holidayTab.setLayout(new BorderLayout());
         holidayTab.add(Holidaypan, BorderLayout.CENTER);
         Holidaypan.setLayout(new BorderLayout());
@@ -139,6 +148,8 @@ public class Employe_HolidayView extends JFrame {
         Tableau1.setPreferredScrollableViewportSize(preferredSize);
         pan1.add(new JScrollPane(Tableau1), BorderLayout.CENTER);
         Display_Table_holiday.add(pan1);
+
+        // Ajout des boutons et champs de saisie pour la section "Congé"
 
         Holidaypan.add(Forme_holiday, BorderLayout.NORTH);
         Forme_holiday.setLayout(new GridLayout(4, 2, 10, 10));
@@ -157,14 +168,18 @@ public class Employe_HolidayView extends JFrame {
         panButton_holiday.add(deleteButton_holiday);
         panButton_holiday.add(displayButton_holiday);
 
-    // TabbedPane
+    // Ajout des onglets à l'onglet principal
         tabbedPane.addTab("Employe", employeTab);
         tabbedPane.addTab("Holiday", holidayTab);
 
+    // Initialisation de la liste des employés qui ont dans la base de données    
         remplaire_les_employes();
+
+    // Affichage de la fenêtre
         setVisible(true);
     }
 
+    // Remplissage de la liste des employés
     public void remplaire_les_employes () {
         List<Employe> Employes = new EmployeModel(new EmployeDAOimpl()).displayEmploye();
        text_employe.removeAllItems();
@@ -175,7 +190,7 @@ public class Employe_HolidayView extends JFrame {
 
 
 
-    // getters
+    // getters :
 
 
         public int getId_employe() {
@@ -243,6 +258,10 @@ public class Employe_HolidayView extends JFrame {
         public JButton getdisplayButton_holiday () {
             return displayButton_holiday;
         }
+
+        public JButton getCreateAcconte(){
+            return create_Acconte_Button;
+        }
         public String getStartDate () {
             return text_startDate.getText();
         }
@@ -281,7 +300,7 @@ public class Employe_HolidayView extends JFrame {
             TypeComboBox.setSelectedIndex(0);
         }
 
-    // methodes de remplir les champs
+    // methode de remplir les champs on utilise cette methode dans le update :
         public void remplaireChamps_em (int id, String nom, String prenom, String email, String telephone, double salaire, Role role, Post poste) {
             text_nom.setText(nom);
             text_prenom.setText(prenom);
@@ -291,12 +310,14 @@ public class Employe_HolidayView extends JFrame {
             roleComboBox.setSelectedItem(role);
             posteComboBox.setSelectedItem(poste);
         }
-
+    
+    // methode de remplir les champs on utilise cette methode dans le update :    
         public void remplaireChamps_ho(int id_employe, String date_debut, String date_fin, Type_holiday type) {
             List<Employe> Employes = new EmployeModel(new EmployeDAOimpl()).displayEmploye();
             text_employe.removeAllItems();
             for (Employe elem : Employes) {
                 if (elem.getId() == id_employe) {
+                    // ici on update le choix de change l'employe est le limite peut etre change les date et le type:
                     text_employe.addItem(elem.getId() + " - " + elem.getNom()+" "+elem.getPrenom()); 
                     text_employe.setSelectedItem(elem.getId() + " - " + elem.getNom()+" "+elem.getPrenom());
                 }

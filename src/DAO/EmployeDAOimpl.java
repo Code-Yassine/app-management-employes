@@ -12,6 +12,7 @@ import java.util.List;
 
 public class EmployeDAOimpl implements GenericDAOI<Employe> {
 
+    // function of add Employe :
     @Override
     public void add(Employe e) {
         String sql = "INSERT INTO employe (nom, prenom, email, telephone, salaire, role, poste , solde) VALUES (?, ?, ?, ?, ?, ?, ? , ?)";
@@ -32,6 +33,7 @@ public class EmployeDAOimpl implements GenericDAOI<Employe> {
         }
     }
 
+    // function of delete Employe :
     @Override
     public void delete(int id) {
         String sql = "DELETE FROM employe WHERE id = ?";
@@ -45,6 +47,7 @@ public class EmployeDAOimpl implements GenericDAOI<Employe> {
         }
     }
 
+    // function of update Employe :
     @Override
     public void update(Employe e) {
         String sql = "UPDATE employe SET nom = ?, prenom = ?, email = ?, telephone = ?, salaire = ?, role = ?, poste = ? WHERE id = ?";
@@ -65,6 +68,7 @@ public class EmployeDAOimpl implements GenericDAOI<Employe> {
         }
     }
 
+    // function of display Employe :
     @Override
     public List<Employe> display() {
         String sql = "SELECT * FROM employe";
@@ -95,6 +99,7 @@ public class EmployeDAOimpl implements GenericDAOI<Employe> {
     }
 
 
+    // function of update solde Employe :
     public void updateSolde(int id, int solde) {
         String sql = "UPDATE employe SET solde = ? WHERE id = ?";
         try (PreparedStatement stmt = DBConnexion.getConnexion().prepareStatement(sql)) {
@@ -107,6 +112,7 @@ public class EmployeDAOimpl implements GenericDAOI<Employe> {
             System.err.println("failed connexion with data base");
         }
     }
+
 
 }
 

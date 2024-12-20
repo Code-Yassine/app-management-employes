@@ -13,5 +13,6 @@ public class Main {
         HolidayModel model_holiday = new HolidayModel(dao_holiday);
         new EmployeController(view, model_employe);
         new HolidayController(view, model_holiday);
+
     }
 }

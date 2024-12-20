@@ -169,5 +169,6 @@ public class HolidayController {
             View.afficherMessageErreur("Erreur lors de la mise à jour");
         }
     }
+
 }
 

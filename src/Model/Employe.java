@@ -1,6 +1,7 @@
 package Model;
 
 public class Employe{
+    //attributs
     private int id;
     private String nom;
     private String prenom;
@@ -11,6 +12,7 @@ public class Employe{
     private Post poste ;
     private int solde ;
 
+    //constructeur
     public Employe(int id ,String nom, String prenom, String email, String telephone, double salaire, Role role, Post post ,int solde){
         this.id = id;
         this.nom = nom;
@@ -23,6 +25,7 @@ public class Employe{
         this.solde = solde;
     }
 
+    //getters et setters 
 
     public int getId(){
         return id;

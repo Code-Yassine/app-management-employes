@@ -2,6 +2,7 @@ package Model;
 import Controller.EmployeController;
 import java.util.List;
 
+import DAO.EmployeDAOimpl;
 import DAO.HolidayDAOimpl;
 import java.sql.Date;
 public class HolidayModel {
@@ -17,6 +18,12 @@ public class HolidayModel {
         if(startdate.equals(enddate)) return false;
         if(startdate.before(new Date(System.currentTimeMillis()))) return false;
         if(enddate.before(new Date(System.currentTimeMillis()))) return false;
+        for (Holiday holiday : new HolidayModel(new HolidayDAOimpl()).displayHoliday()) {
+                if (holiday.getId_employe() == id_employe) {
+                    if(!(enddate.before(holiday.getStartDate()) || startdate.after(holiday.getEndDate()))) return false;
+                    break;
+                }
+        }
         
         long daysBetween = (enddate.toLocalDate().toEpochDay() - startdate.toLocalDate().toEpochDay());
         if(daysBetween > targetEmploye.getSolde()) return false;
