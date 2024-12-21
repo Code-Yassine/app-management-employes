@@ -26,6 +26,14 @@ public class EmployeModel {
             System.out.println("Erreur : le mail doit contenir le @.");
             return false;
         }
+        for(Employe e : new EmployeModel(new EmployeDAOimpl()).displayEmploye()){
+            if(e.getEmail().equals(email)){
+                return false;
+            }
+            if(e.getTelephone().equals(telephone)){
+                return false;
+            }
+        }
 
         Employe e = new Employe(id,nom, prenom, email, telephone, salaire, role, post ,solde);
         
