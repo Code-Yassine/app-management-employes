@@ -20,7 +20,19 @@ public class HolidayModel {
         if(enddate.before(new Date(System.currentTimeMillis()))) return false;
         for (Holiday holiday : new HolidayModel(new HolidayDAOimpl()).displayHoliday()) {
                 if (holiday.getId_employe() == id_employe) {
-                    if(!(enddate.before(holiday.getStartDate()) || startdate.after(holiday.getEndDate()))) return false;
+                    if(startdate.after(holiday.getStartDate()) && startdate.before(holiday.getEndDate()) && enddate.before(holiday.getEndDate()) && enddate.after(holiday.getStartDate())){
+                        System.out.println("le cong s est superpose a un autre cong");
+                        return false;
+                    }
+
+                    if(startdate.after(holiday.getStartDate()) && startdate.before(holiday.getEndDate()) && enddate.after(holiday.getEndDate())){
+                        startdate = holiday.getEndDate();
+                        continue;
+                    }
+                    if(startdate.before(holiday.getStartDate()) && enddate.after(holiday.getStartDate()) && enddate.before(holiday.getEndDate())){
+                        enddate = holiday.getStartDate();
+                        continue;
+                    }
                     break;
                 }
         }

@@ -1,6 +1,9 @@
 package Model;
 import DAO.EmployeDAOimpl;
+import DAO.HolidayDAOimpl;
+
 import java.util.List;
+import javax.swing.text.View;
 
 public class EmployeModel {
     private EmployeDAOimpl dao;
@@ -33,6 +36,11 @@ public class EmployeModel {
 
     // function of delete Employe :
     public  boolean deleteEmploye(int id){
+        for(Holiday e : new HolidayModel(new HolidayDAOimpl()).displayHoliday()){
+            if(e.getId_employe()== id){
+                return false;
+            }
+        }
         dao.delete(id);
         return true;
     }

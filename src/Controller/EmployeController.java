@@ -94,7 +94,7 @@ public class EmployeController {
                 View.afficherMessageSucces("L'employe a bien ete supprimer.");
                 displayEmploye();
             }else{
-                View.afficherMessageErreur("L'employe n'a pas ete supprimer.");
+                View.afficherMessageErreur("L'employe a une relation avec un holiday.");
             }
         }
     }
