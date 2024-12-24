@@ -100,9 +100,10 @@ public class HolidayController {
                     break;
                 }
             }
-            EmployeController.updateSolde(id_employe,solde+olddaysbetween);
+            
             boolean deletereussi = model_holiday.deleteHoliday(id);
             if(deletereussi){
+                EmployeController.updateSolde(id_employe,solde+olddaysbetween);
                 View.afficherMessageSucces("Holiday a bien ete supprimer.");
                 displayHoliday();
             }else{

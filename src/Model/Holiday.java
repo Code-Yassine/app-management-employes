@@ -35,8 +35,4 @@ public int getId_employe() {
     return id_employe;
 }
 
-    public Object getSolde() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
 }
