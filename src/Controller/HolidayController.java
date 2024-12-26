@@ -5,6 +5,9 @@ import Model.*;
 import View.*;
 import java.sql.Date;
 import java.util.List;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -34,6 +37,8 @@ public class HolidayController {
         Employe_HolidayView.Tableau1.getSelectionModel().addListSelectionListener(e -> updateHolidaybyselect());
         View.getaddButton_holiday().addActionListener(e -> addHoliday());
         View.getdisplayButton_holiday().addActionListener(e -> displayHoliday());
+        View.getImportButton_holiday().addActionListener(e -> handleImport());
+        View.getExportButton_holiday().addActionListener(e -> handleExport());
     }
 
     private void addHoliday(){
@@ -170,6 +175,42 @@ public class HolidayController {
             View.afficherMessageErreur("Erreur lors de la mise à jour");
         }
     }
+
+     private void handleImport(){
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Fichiers CSV", "txt"));
+
+        if(fileChooser.showOpenDialog(View) == JFileChooser.APPROVE_OPTION){
+            try {
+                String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                model_holiday.importData(filePath);
+                displayHoliday();
+                View.afficherMessageSucces("Importation réussie.");
+            } catch (Exception e) {
+                View.afficherMessageErreur("Erreur lors de l'importation :"+e.getMessage());
+            }
+        }
+    }
+
+    private void handleExport(){
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Fichiers CSV", "txt"));
+
+        if(fileChooser.showSaveDialog(View) == JFileChooser.APPROVE_OPTION){
+            try {
+                String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                if(!filePath.toLowerCase().endsWith(".txt")){
+                    filePath += ".txt";
+                }
+                List<Holiday> holidays = model_holiday.displayHoliday();
+                model_holiday.exportData(filePath , holidays);
+                View.afficherMessageSucces("Exportation réussie.");
+            } catch (Exception e) {
+                View.afficherMessageErreur("Erreur lors de l'exportation :"+e.getMessage());
+            }
+        }
+    }
+
 
 }
 

@@ -74,6 +74,8 @@ public class Employe_HolidayView extends JFrame {
     // boutons inportation et exportation
     private JButton importButton = new JButton("Import");
     private JButton exportButton = new JButton("Export");
+    private JButton importButton_holiday = new JButton("Import");
+    private JButton exportButton_holiday = new JButton("Export");
 
     // Boutons pour les actions sur les congés
     private JButton addButton_holiday = new JButton("Ajouter");
@@ -173,6 +175,8 @@ public class Employe_HolidayView extends JFrame {
         panButton_holiday.add(updateButton_holiday);
         panButton_holiday.add(deleteButton_holiday);
         panButton_holiday.add(displayButton_holiday);
+        panButton_holiday.add(importButton_holiday);
+        panButton_holiday.add(exportButton_holiday);
 
     // Ajout des onglets à l'onglet principal
         tabbedPane.addTab("Employe", employeTab);
@@ -286,6 +290,14 @@ public class Employe_HolidayView extends JFrame {
 
         public JButton getExportButton() {
             return exportButton;
+        }
+
+        public JButton getImportButton_holiday() {
+            return importButton_holiday;
+        }
+
+        public JButton getExportButton_holiday() {
+            return exportButton_holiday;
         }
 
     // methods d'affichage des messages

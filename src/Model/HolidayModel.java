@@ -1,6 +1,9 @@
 package Model;
 import Controller.EmployeController;
 import DAO.HolidayDAOimpl;
+
+import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.util.List;
 public class HolidayModel {
@@ -87,6 +90,42 @@ public class HolidayModel {
         Holiday e = new Holiday(id, id_employe, startdate, enddate, type);
         dao.update(e);
         return true;
+    }
+
+    private boolean checkFileExists(File file){
+        if(!file.exists()){
+            throw new IllegalArgumentException("le fichier n'existe pas :" + file.getPath());
+        }
+        return true;
+    }
+
+    private boolean checkIsFile(File file){
+        if(!file.isFile()){
+            throw new IllegalArgumentException("le chemin specifie n'est pas un fichier :" + file.getPath());
+        }
+        return true;
+    }
+
+    private boolean checkIsReadable(File file){
+        if(!file.canRead()){
+            throw new IllegalArgumentException("le fichier n'est pas lisible :" + file.getPath());
+        }
+        return true;
+    }
+
+    public void importData(String FileName){
+        File file = new File(FileName);
+        checkFileExists(file);
+        checkIsFile(file);
+        checkIsReadable(file);
+        dao.importData(FileName);
+    }
+
+    public void exportData(String FileName , List<Holiday> data) throws IOException {
+        File file = new File(FileName);
+        checkFileExists(file);
+        checkIsFile(file);
+        dao.exportData(FileName, data);
     }
 
 }

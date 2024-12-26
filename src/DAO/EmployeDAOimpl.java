@@ -1,6 +1,7 @@
 
 package DAO;
 import Model.Employe;
+import Model.EmployeModel;
 import Model.Post;
 import Model.Role;
 
@@ -128,6 +129,28 @@ public class EmployeDAOimpl implements GenericDAOI<Employe> , DataImportExport<E
             String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
+                
+            if(Integer.parseInt(data[4])< 0 ){
+                System.out.println("Erreur : le salaire doit etre positif.");
+                throw new IllegalArgumentException();
+            }
+
+            if(data[3].length() != 10){
+                System.out.println("Erreur : le telephone doit etre 10 num.");
+                throw new IllegalArgumentException();
+            }
+            if(!data[2].contains("@")){
+                System.out.println("Erreur : le mail doit contenir le @.");
+                throw new IllegalArgumentException();
+            }
+            for(Employe e : new EmployeModel(new EmployeDAOimpl()).displayEmploye()){
+                if(e.getEmail().equals(data[2])){
+                    throw new IllegalArgumentException();
+                }
+                if(e.getTelephone().equals(data[3])){
+                    throw new IllegalArgumentException();
+                }
+            }
                 if(data.length == 8){
                     stmt.setString(1, data[0].trim());
                     stmt.setString(2, data[1].trim());
