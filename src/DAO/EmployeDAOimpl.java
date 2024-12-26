@@ -3,6 +3,12 @@ package DAO;
 import Model.Employe;
 import Model.Post;
 import Model.Role;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class EmployeDAOimpl implements GenericDAOI<Employe> {
+public class EmployeDAOimpl implements GenericDAOI<Employe> , DataImportExport<Employe> {
 
     // function of add Employe :
     @Override
@@ -113,6 +119,51 @@ public class EmployeDAOimpl implements GenericDAOI<Employe> {
         }
     }
 
+    // function of import data Employe :
+    @Override
+    public void importData(String FileName) {
+        String sql = "INSERT INTO employe (nom, prenom, email, telephone, salaire, role, poste , solde) VALUES (?, ?, ?, ?, ?, ?, ? , ?)";
+        try(BufferedReader reader = new BufferedReader(new FileReader(FileName)) ; 
+        PreparedStatement stmt = DBConnexion.getConnexion().prepareStatement(sql)) {
+            String line = reader.readLine();
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if(data.length == 8){
+                    stmt.setString(1, data[0].trim());
+                    stmt.setString(2, data[1].trim());
+                    stmt.setString(3, data[2].trim());
+                    stmt.setString(4, data[3].trim());
+                    stmt.setDouble(5, Double.parseDouble(data[4]));
+                    stmt.setString(6, data[5].trim());
+                    stmt.setString(7, data[6].trim());
+                    stmt.setInt(8, Integer.parseInt(data[7]));
+                    stmt.addBatch();
+                }
+            }
+            stmt.executeBatch();
+            System.out.println("Employees imported successfully !");
+        } catch (IOException | SQLException | ClassNotFoundException exception) {
+            exception.printStackTrace();
+            System.err.println("failed of import data employe");
+        }
+    }
 
+    // function of export data Employe :
+    @Override
+    public void exportData(String FileName, List<Employe> data) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FileName))) {
+            writer.write("nom,prenom,email,telephone,salaire,role,poste,solde\n");
+            writer.newLine();
+            for (Employe e : data) {
+               String line = String.format("%s , %s , %s , %s ,%.2f, %s , %s ", 
+               e.getNom(), e.getPrenom(), e.getEmail(), e.getTelephone(), e.getSalaire(), e.getRole(), e.getPost());
+                writer.write(line);
+                writer.newLine();
+            }
+            System.out.println("Employees exported successfully !");
+        } catch (IOException exception) {
+            System.err.println("failed of export data employe");
+        }
+    }
 }
 

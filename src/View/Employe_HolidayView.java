@@ -71,6 +71,10 @@ public class Employe_HolidayView extends JFrame {
     private JButton displayButton_employe = new JButton("Afficher");
     private JButton create_Acconte_Button = new JButton("Create Acconte");
 
+    // boutons inportation et exportation
+    private JButton importButton = new JButton("Import");
+    private JButton exportButton = new JButton("Export");
+
     // Boutons pour les actions sur les congés
     private JButton addButton_holiday = new JButton("Ajouter");
     private JButton updateButton_holiday = new JButton("Modifier");
@@ -119,7 +123,9 @@ public class Employe_HolidayView extends JFrame {
         panButton_employe.add(updateButton_employe);
         panButton_employe.add(deleteButton_employe);
         panButton_employe.add(displayButton_employe);
-        panButton_employe.add(create_Acconte_Button);
+        // panButton_employe.add(create_Acconte_Button);
+        panButton_employe.add(importButton);
+        panButton_employe.add(exportButton);
 
         Employepan.add(Forme_employe, BorderLayout.NORTH);
         Forme_employe.setLayout(new GridLayout(7, 2, 10, 10));
@@ -272,6 +278,14 @@ public class Employe_HolidayView extends JFrame {
 
         public Type_holiday getType_holiday(){
             return (Type_holiday) TypeComboBox.getSelectedItem();
+        }
+
+        public JButton getImportButton() {
+            return importButton;
+        }
+
+        public JButton getExportButton() {
+            return exportButton;
         }
 
     // methods d'affichage des messages

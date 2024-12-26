@@ -9,6 +9,10 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 import DAO.EmployeDAOimpl;
+import DAO.HolidayDAOimpl;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class EmployeController {
 
@@ -38,6 +42,8 @@ public class EmployeController {
         View.getupdateButton_employe().addActionListener(e -> updateEmploye());
         View.getdisplayButton_employe().addActionListener(e -> displayEmploye());
         View.getCreateAcconte().addActionListener(e -> createAcconte());
+        View.getImportButton().addActionListener(e -> handleImport());
+        View.getExportButton().addActionListener(e -> handleExport());
 
         // Selection Listener :
         Employe_HolidayView.Tableau.getSelectionModel().addListSelectionListener(e -> updateEmployebyselect());
@@ -165,8 +171,43 @@ public class EmployeController {
         if(selectedrow == -1){
             View.afficherMessageErreur("Veuillez selectionner une ligne.");
         }else{
-            View.CreateConteView createConteView = new CreateConteView();
+            View.CreateAccountView createConteView = new CreateAccountView();
             int id = (int) Employe_HolidayView.Tableau.getValueAt(selectedrow, 0);
+        }
+    }
+
+    private void handleImport(){
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Fichiers CSV", "txt"));
+
+        if(fileChooser.showOpenDialog(View) == JFileChooser.APPROVE_OPTION){
+            try {
+                String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                model_employe.importData(filePath);
+                displayEmploye();
+                View.afficherMessageSucces("Importation réussie.");
+            } catch (Exception e) {
+                View.afficherMessageErreur("Erreur lors de l'importation :"+e.getMessage());
+            }
+        }
+    }
+
+    private void handleExport(){
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Fichiers CSV", "txt"));
+
+        if(fileChooser.showSaveDialog(View) == JFileChooser.APPROVE_OPTION){
+            try {
+                String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                if(!filePath.toLowerCase().endsWith(".txt")){
+                    filePath += ".txt";
+                }
+                List<Employe> employes = model_employe.displayEmploye();
+                model_employe.exportData(filePath , employes);
+                View.afficherMessageSucces("Exportation réussie.");
+            } catch (Exception e) {
+                View.afficherMessageErreur("Erreur lors de l'exportation :"+e.getMessage());
+            }
         }
     }
 

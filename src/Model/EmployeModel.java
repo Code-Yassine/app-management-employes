@@ -2,6 +2,8 @@ package Model;
 import DAO.EmployeDAOimpl;
 import DAO.HolidayDAOimpl;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import javax.swing.text.View;
 
@@ -72,5 +74,41 @@ public class EmployeModel {
     public boolean updateSolde(int id, int solde) {
         dao.updateSolde(id, solde);
         return true;
+    }
+
+    private boolean checkFileExists(File file){
+        if(!file.exists()){
+            throw new IllegalArgumentException("le fichier n'existe pas :" + file.getPath());
+        }
+        return true;
+    }
+
+    private boolean checkIsFile(File file){
+        if(!file.isFile()){
+            throw new IllegalArgumentException("le chemin specifie n'est pas un fichier :" + file.getPath());
+        }
+        return true;
+    }
+
+    private boolean checkIsReadable(File file){
+        if(!file.canRead()){
+            throw new IllegalArgumentException("le fichier n'est pas lisible :" + file.getPath());
+        }
+        return true;
+    }
+
+    public void importData(String FileName) {
+        File file = new File(FileName);
+        checkFileExists(file);
+        checkIsFile(file);
+        checkIsReadable(file);
+        dao.importData(FileName);
+    }
+
+    public void exportData(String FileName , List<Employe> data) throws IOException {
+        File file = new File(FileName);
+        checkFileExists(file);
+        checkIsFile(file);
+        dao.exportData(FileName, data);
     }
 }

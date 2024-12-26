@@ -12,15 +12,16 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-public class CreateConteView{
+public class CreateAccountView{
     private JFrame frame;
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
+    int id = 0;
     private JLabel roleLabel;
     private JComboBox<String> roleComboBox;
 
-    public CreateConteView() {
+    public CreateAccountView() {
         createGUI();
     }
 
@@ -60,5 +61,21 @@ public class CreateConteView{
 
     public String getPassword() {
         return  new String(passwordField.getPassword());
+    }
+
+    public void afficherMessageErreur(String message) {
+        JOptionPane.showMessageDialog(frame, message, "Erreur", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void afficherMessageSucces(String message) {
+        JOptionPane.showMessageDialog(frame, message, "Succès", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void setID(int id){
+        this.id = id;
+    }
+
+    public int getID(){
+        return id;
     }
 }
