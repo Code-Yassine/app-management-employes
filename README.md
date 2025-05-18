@@ -10,7 +10,6 @@
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
   - [Usage](#usage)
-  - [Testing](#testing)
 - [Tech Stack](#tech-stack)
 - [Last Commit Info](#last-commit-info)
 
