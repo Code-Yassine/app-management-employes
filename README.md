@@ -17,7 +17,7 @@
 
 ## 📘 Overview
 
-Streamline your HR processes with **app-gestion-employes**, the ultimate solution for managing employee data and holiday records.
+Streamline your HR processes with **app-management-employes**, the ultimate solution for managing employee data and holiday records.
 
 ### 💡 Why app-gestion-employes?
 
