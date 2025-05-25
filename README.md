@@ -38,7 +38,6 @@ This project simplifies employee and holiday management, ensuring efficient data
 
 Make sure you have the following installed:
 - **Java**
-- **Maven**
 
 ### 🛠 Installation
 
@@ -60,7 +59,8 @@ mvn install
 To run the project:
 
 ```bash
-mvn exec:java
+javac Main.java
+java Main
 ```
 
 ---
@@ -70,7 +70,6 @@ mvn exec:java
 Built with the following tools and technologies:
 
 - Java
-- Maven
 - MySQL
 
 ---
